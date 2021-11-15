@@ -1,0 +1,94 @@
+import random
+import json
+import os
+
+from pico2d import *
+import game_framework
+import game_world
+
+from boy import Boy
+from grass import Grass
+from bird import Bird
+from ball import Ball
+
+import random
+
+name = "MainState"
+
+boy = None
+grass = None
+birds = []
+balls = []
+big_balls = []
+
+
+def collide(a, b):
+    # fill here
+    return True
+
+
+
+
+def enter():
+    global boy
+    boy = Boy()
+    game_world.add_object(boy, 1)
+
+    global grass
+    grass = Grass()
+    game_world.add_object(grass, 0)
+
+    global birds
+    for i in range(5):
+        x = random.randint(100, 1000)
+        y = random.randint(200, 500)
+        d = random.randint(100, 1000)
+        birds.append(Bird(x, y, d))
+    game_world.add_objects(birds, 1)
+    # fill here for balls
+
+
+
+
+
+def exit():
+    game_world.clear()
+
+def pause():
+    pass
+
+
+def resume():
+    pass
+
+
+def handle_events():
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+                game_framework.quit()
+        else:
+            boy.handle_event(event)
+
+
+def update():
+    for game_object in game_world.all_objects():
+        game_object.update()
+
+    # fill here for collision check
+
+
+
+def draw():
+    clear_canvas()
+    for game_object in game_world.all_objects():
+        game_object.draw()
+    update_canvas()
+
+
+
+
+
+
