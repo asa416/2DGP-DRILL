@@ -14,8 +14,11 @@ class Ball:
         if Ball.image == None:
             Ball.image = load_image('ball21x21.png')
         self.x, self.y, self.fall_speed = random.randint(0, 1600-1), 600, random.randint(Ball.MIN_FALL_SPEED, Ball.MAX_FALL_SPEED)
-        self.attach = False
-        self.speed = 0
+        # self.attach = False
+        # self.speed = 0
+
+        self.parent = None
+        self.rx, self.ry = 0, 0
 
     def get_bb(self):
         # fill here
@@ -27,16 +30,20 @@ class Ball:
         draw_rectangle(*self.get_bb())
 
     def update(self):
-        self.y -= self.fall_speed * game_framework.frame_time
-        if self.attach:
-            self.x += game_framework.frame_time * self.speed
-
-
-
-    def collided(self):
-        pass
+        if self.parent is None: # 볼은 부모가 없으면..
+            self.y -= self.fall_speed * game_framework.frame_time
+        else:
+            self.x, self.y = self.parent.x + self.rx, self.parent.y + self.ry # 볼의 좌표가, 발판을 따라간다?
+        # if self.attach:
+        #     self.x += game_framework.frame_time * self.speed
 
     def stop(self):
         self.fall_speed = 0
 
+    def set_parent(self, brick):
+        self.parent = brick
+        self.rx, self.ry = self.x - brick.x, self.y - brick.y
+
+    def bye(self):
+        self.parent = None
 
